@@ -1,0 +1,64 @@
+.polka {
+    --polka-outer: white;
+    --polka-inner: black;
+
+    background-image: radial-gradient(var(--polka-inner) 18%, transparent 18.5%), radial-gradient(var(--polka-inner) 18%, transparent 18.5%);
+    background-position: 0px 0px, 20px 20px;
+    background-size: 40px 40px;
+    background-color: var(--polka-outer);
+}
+
+:root {
+    --top-bar: 20px;
+    --left-bar: 400px;
+    --bottom-bar: 100px;
+    --margin: 64px;
+}
+
+body {
+    background-color: black;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+}
+.bg {
+    position: absolute;
+    left: calc(50% + (var(--left-bar) / 2));
+    top: calc(50% + (var(--top-bar) / 2) - (var(--bottom-bar) / 2));
+    transform: translate(-50%,-50%);
+    width: calc(100% - var(--margin) - var(--left-bar));
+    height: calc(100% - var(--margin) - var(--top-bar) - var(--bottom-bar));
+    box-sizing: border-box;
+    outline: #c9c2df solid 100vw;
+    border: var(--c9) 1px solid;
+    border-radius: 25px;
+}
+
+.top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: calc(var(--top-bar) + (var(--margin) / 2));
+}
+.left {
+    width: calc(var(--left-bar) + (var(--margin) / 2));
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.bottom {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: calc(100vw - var(--left-bar));
+    height: calc(var(--bottom-bar) + (var(--margin) / 2));
+}
+
+.bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

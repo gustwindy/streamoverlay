@@ -1,0 +1,28 @@
+.noteArea {
+    width: 80%;
+    background-color: var(--c7);
+    min-height: 60px;
+    padding: 15px;
+    margin: 15px;
+    border-radius: 15px;
+    border: var(--c4) 4px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    color: #4b3c60;
+    font-size: 22px;
+}
+.noteArea::after {
+    background-image: url(../assets/important.png);
+    width: 50px;
+    height: 50px;
+    content: "";
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    right: -25px;
+    top: -10px;
+}

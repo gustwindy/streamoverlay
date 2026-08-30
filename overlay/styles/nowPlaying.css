@@ -1,0 +1,55 @@
+
+#nowPlaying {
+    background-color: var(--c7);
+    border: #4b3c60 1px solid;
+    width: 80%;
+    padding: 10px 17px 10px 17px;
+    margin: 15px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+
+    h1 {
+        margin: 0;
+        font-size: 15px;
+        color: var(--c9);
+    }
+
+    .title {
+        color: var(--c4);
+        font-size: 30px;
+        width: 100%;
+    }
+    .artist {
+        color: var(--c6);
+    }
+
+    .progressBarContainer {
+        width: 100%;
+    }
+
+    .progressBar {
+        background-color: var(--c2);
+        width: 100%;
+        height: 5px;
+        border-radius: 5px;
+        display: block;
+        border: var(--c1-2) 1px solid;
+    }
+
+    .progress {
+        display: block;
+        width: 70%;
+        height: 100%;
+        background-color: var(--c4);
+        border-radius: 5px;
+    }
+
+    .duration {
+        display: flex;
+        color: var(--c9);
+    }
+    .durationStart {
+        margin-right: auto;
+    }
+}

@@ -1,0 +1,48 @@
+@import url(styles/main.css);
+@import url(styles/chat.css);
+@import url(styles/note.css);
+@import url(styles/nowPlaying.css);
+
+:root {
+
+    font-family: rain-kiss;
+    --c1-2: #bdaad7;
+    --c1: #C7B5E0;
+    --c2: #E6E9EF;
+    --c3: #DBC6FB;
+    --c4: #AD77FD;
+    --c5: #BE92FF;
+    --c6: #882AFB;
+    --c7: #DAD9ED;
+    --c8: #756a83;
+    --c9: #4b3c60;
+}
+
+@font-face {
+    src: url(assets/fonts/rainkiss.ttf);
+    font-family: rain-kiss;
+}
+@font-face {
+    src: url(assets/fonts/starborn.ttf);
+    font-family: star-born;
+}
+
+
+
+/* */
+
+.adhdContainer {
+    width: 90vw;
+    height: 50vh;
+    bottom: 0;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    left: 10vw;
+    align-items: end;
+}
+
+.adhd {
+    width: 75vw;
+    height: 100%;
+}
