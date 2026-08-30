@@ -62,3 +62,10 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+.hidden {
+    display: none !important;
+}
+.invis {
+    opacity: 0;
+}

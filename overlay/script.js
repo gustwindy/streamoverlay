@@ -12,14 +12,16 @@ const boringStraightCircles = []
 
 Matter.Composite.add(engine.world, walls)
 
-const container = document.getElementById("adhd")
+const adhdContainer = document.getElementById("adhd")
+const chatContainer = document.getElementById("chat")
+const noteArea = document.querySelector(".noteArea")
+const note = document.getElementById("note")
 
 function addUser(key, url) {
     const shape = Matter.Bodies.circle(0,0,50,{
         restitution: 0.8,
         mass: 30
     })
-
     
     Matter.Composite.add(engine.world, shape)
 
@@ -29,16 +31,21 @@ function addUser(key, url) {
     el.classList.add("adhdUser")
     el.style.backgroundImage = `url(${url})`
 
-    container.append(el)
+    adhdContainer.append(el)
 
     users[key] = {
         body: shape,
-        element: el
+        element: el,
+        remove: ()=>{
+            Matter.Composite.remove(engine.world,users[key].body)
+            users[key].element.remove()
+            delete users[key]
+        }
     }
 }
-function addBoringCircle() {
+function addBoringCircle(push = true) {
     const shape = Matter.Bodies.circle(0,50,25,{
-        restitution: 0.2,
+        restitution: 0.4,
         mass: 1,
         friction: 0.01,
     })
@@ -48,12 +55,20 @@ function addBoringCircle() {
 
     el.classList.add("adhdCircle")
 
-    container.append(el)
+    adhdContainer.append(el)
 
-    boringStraightCircles.push({
+    const d = {
         body: shape,
-        element: el
-    })
+        element: el,
+        remove: ()=>{
+            Matter.Composite.remove(engine.world, d.body)
+            d.element.remove()
+            boringStraightCircles[boringStraightCircles.indexOf(d)] = addBoringCircle(false)
+        }
+    }
+
+    if (push) boringStraightCircles.push(d)
+    return d
 }
 
 function interact(key) {
@@ -66,10 +81,6 @@ function interact(key) {
     Matter.Body.setAngularSpeed(users[key].body,Math.sign(Math.random())*0.2)
 }
 
-for (let i = 0; i < 2; i++) {
-    addUser(`a${i}`,"https://cdn.discordapp.com/avatars/1156974559468204132/1791260a416c50f51309e49bac2d6fbf.png?size=4096")
-    addUser(`b${i}`,"https://cdn.discordapp.com/avatars/656132997422252042/b6b0a2cc6ec2e378b0a032d470645312.png?size=4096")
-}
 for (let i = 0; i < 45; i++) {
     addBoringCircle()
 }
@@ -89,13 +100,83 @@ function consume(u) {
         }
     }
     u.last = final
+
+    if (Math.max(Math.abs(final.x),Math.abs(final.y)) > 3000) {
+        u.remove()
+    }
 }
 
 function update() {
-    
     Object.values(users).forEach(consume)
     Object.values(boringStraightCircles).forEach(consume)
     requestAnimationFrame(update)
 }
 
+const handlers = {
+    "userList": (names)=>{
+        console.log(names)
+        const valid = []
+        names.forEach(u=>{
+            if (!users[u.name]) {
+                addUser(u.name,u.url)
+            }
+            valid.push(u.name)
+        })
+        console.log(users,valid)
+        Object.keys(users).forEach((name)=>{
+            if (valid.indexOf(name) == -1) {
+                users[name].remove()
+            }
+        })
+    },
+    "message": (message)=>{
+        if (users[message.author]) interact(message.author)
+        const copy = document.querySelector("#templates .msg").cloneNode(true)
+
+        copy.querySelector(".msg-author").innerText = message.author
+        copy.querySelector(".msg-status").innerText = message.mod ? "(mod)" : ""
+        copy.querySelector(".msg-text").innerText = message.content
+
+        chatContainer.append(copy)
+
+        while (chatContainer.children.length > 25) {
+            chatContainer.firstElementChild.remove()
+        }
+    },
+    "note": (noteText)=>{
+        noteArea.classList.toggle("invis",!noteText)
+        note.innerText = noteText
+    }
+}
+
+function connect() {
+    var ws = new WebSocket('ws://localhost:61310');
+    ws.onopen = function() {
+        console.log("connected btw")
+    };
+
+    ws.onmessage = function(e) {
+        const d = JSON.parse(e.data)
+        const handler = handlers[d.type]
+
+        if (handler) {
+            handler(d.data)
+        } else {
+            console.warn("no handler",d)
+        }
+    };
+
+    ws.onclose = function(e) {
+        console.log("gone?!")
+        setTimeout(function() {
+            connect()
+        }, 1000)
+    }
+
+    ws.onerror = function(err) {
+        ws.close()
+    }
+}
+
+connect()
 requestAnimationFrame(update)

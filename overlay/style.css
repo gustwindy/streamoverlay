@@ -2,6 +2,7 @@
 @import url(styles/chat.css);
 @import url(styles/note.css);
 @import url(styles/nowPlaying.css);
+@import url(styles/adhd.css);
 
 :root {
 
@@ -25,51 +26,4 @@
 @font-face {
     src: url(assets/fonts/starborn.ttf);
     font-family: star-born;
-}
-
-
-
-/* */
-
-.adhdContainer {
-    width: 90vw;
-    height: 50vh;
-    bottom: 0;
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    left: 10vw;
-    align-items: end;
-
-    overflow-y: hidden;
-    overflow-x: visible;
-}
-
-#adhd {
-    width: 1000px;
-    height: 500px;
-    display: flex;
-    position: relative;
-    background: linear-gradient(0deg, var(--c4) 0%, transparent 25%);
-}
-
-.adhdCircle {
-    position: absolute;
-    border-radius: 100px;
-    display: block;
-    background-color: var(--c9);
-    height: 50px;
-    width: 50px;
-    will-change: transform, top, left;
-    border: var(--c8) 4px solid;
-    box-sizing: border-box;
-    transition: all 100ms;
-}
-
-.adhdUser {
-    width: 100px;
-    height: 100px;
-    background-size: 100% 100%;
-    outline: var(--c9) 2px solid;
-    border: none;
 }
