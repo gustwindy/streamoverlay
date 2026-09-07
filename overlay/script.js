@@ -16,6 +16,7 @@ const adhdContainer = document.getElementById("adhd")
 const chatContainer = document.getElementById("chat")
 const noteArea = document.querySelector(".noteArea")
 const note = document.getElementById("note")
+const nowPlaying = document.getElementById("nowPlaying")
 
 function addUser(key, url) {
     const shape = Matter.Bodies.circle(0,0,50,{
@@ -90,10 +91,11 @@ function consume(u) {
     const final = {
         x: u.body.position.x + 500,
         y: u.body.position.y + 250,
-        rot: u.body.angle
+        rot: u.body.angle,
+        t: Date.now()
     }
     if (u.last) {
-        if (Math.abs(u.last.rot-final.rot) > 0.01||Math.abs(u.last.x-final.x) > 0.25||Math.abs(u.last.y-final.y) > 0.25) {
+        if (final.t-u.last.t > 1||Math.abs(u.last.rot-final.rot) > 0.01||Math.abs(u.last.x-final.x) > 0.25||Math.abs(u.last.y-final.y) > 0.25) {
             u.element.style.left = `${final.x}px`
             u.element.style.top = `${final.y}px`
             u.element.style.transform = `translate(-50%, -50%) rotate(${u.body.angle}rad)`
@@ -110,6 +112,9 @@ function update() {
     Object.values(users).forEach(consume)
     Object.values(boringStraightCircles).forEach(consume)
     requestAnimationFrame(update)
+}
+function timestamp(sec) {
+    return `${Math.floor(sec / 60)}:${Math.floor(sec % 60).toString().padStart(2, "0")}`
 }
 
 const handlers = {
@@ -146,6 +151,13 @@ const handlers = {
     "note": (noteText)=>{
         noteArea.classList.toggle("invis",!noteText)
         note.innerText = noteText
+    },
+    "nowPlaying": (playing)=>{
+        nowPlaying.querySelector(".title").innerText = playing.title ?? "No Title"
+        nowPlaying.querySelector(".artist").innerText = playing.artist ?? "Unknown Artist"
+        /*nowPlaying.querySelector(".durationStart").innerText = timestamp(playing.pos) ?? "0:00"
+        nowPlaying.querySelector(".durationEnd").innerText = timestamp(playing.length) ?? "0:00"
+        nowPlaying.querySelector(".progress").style.width = `${(playing.pos/playing.length)*100}%`*/
     }
 }
 

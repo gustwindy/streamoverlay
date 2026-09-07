@@ -14,7 +14,7 @@ class Communicator():
             self.clients.remove(client)
 
     async def send_message(self,key,data):
-        print(key,data)
+        #print(key,data)
         for i in self.clients:
             try:
                 await i.send(json.dumps({

@@ -1,5 +1,6 @@
 import asyncio
 import datetime
+import json
 
 import twitchio
 from twitchio.ext import commands, routines
@@ -16,6 +17,7 @@ class Overlay(commands.Component):
         self.userCache = {}
         
         self.check_viewers.start()
+        self.song_thing.start()
         super().__init__()
     
     @commands.command()
@@ -38,6 +40,18 @@ class Overlay(commands.Component):
             "content": message.text,
             "color": message.color.code, # prob unused cos queer # pyright: ignore[reportOptionalMemberAccess] # gay
         })
+    
+    @commands.Component.listener("follow")
+    async def on_follow(self, follow: twitchio.ChannelFollow):
+        await self.socket.send_message("follow",{
+            "user": follow.user.display_name
+        })
+        await follow.broadcaster.send_message(f"ty for follow {follow.user.name}!!",self.bot.bot_id)
+    
+    @routines.routine(delta=datetime.timedelta(seconds=5))
+    async def song_thing(self):
+        with open("/home/guhw/now_playing.json","r") as f:
+            await self.socket.send_message("nowPlaying",json.loads(f.read()))
     
     @routines.routine(delta=datetime.timedelta(seconds=30))
     async def check_viewers(self):
